@@ -10,7 +10,8 @@ function App() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [users, setUsers] = useState([]);
     const [showRegister, setShowRegister] = useState(false);
-
+    const [adminError, setAdminError] = useState('');
+    
     // === FOR LOCATION FEATURE DEVELOPERS ===
     // TODO: Add these states:
     // const [locations, setLocations] = useState([]);
@@ -115,10 +116,10 @@ function App() {
                 document.getElementById('newPassword').value = '';
                 document.getElementById('isAdminCheck').checked = false;
             } else {
-                setError(data.message);
+                alert(data.message); // This will show a popup warning for duplicate username
             }
         } catch (err) {
-            setError('Failed to create user');
+            alert('Failed to create user');
         }
     };
 
@@ -254,11 +255,12 @@ function App() {
             </div>
         );
     }
-
     return (
         <div className="login-container">
             <h2 className="login-header">{showRegister ? 'Register' : 'Login'}</h2>
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className={error.includes('successful') ? 'success-message' : 'error-message'}>
+                {error}
+            </div>}
             <form onSubmit={showRegister ? handleRegister : handleLogin}>
                 <div className="form-group">
                     <label>Username:</label>
@@ -293,5 +295,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
