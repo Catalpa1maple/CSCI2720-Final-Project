@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
     isadmin: Number
 });
 
-const User = mongoose.model('User', UserSchema, 'loginsystem');
+const User = mongoose.model('User', UserSchema);
 
 const initializeDatabase = async () => {
     try {
