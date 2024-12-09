@@ -1,146 +1,225 @@
-.container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    border-radius: 10px;
+/* === AUTHENTICATION SYSTEM STYLES === */
+
+/* Login/Register Container Styles */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header {
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Element Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Button Styles */
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.submit-button.secondary {
+    background-color: #6c757d;
+}
+
+.submit-button.secondary:hover {
+    background-color: #545b62;
+}
+
+/* Message Styles */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* === NAVBAR STYLES === */
+.navbar {
+    background-color: #333;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
+    color: white;
 }
 
-.welcome-text {
-    color: #2c3e50;
-    margin: 0;
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.nav-link:hover {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+/* User Info Styles */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .logout-button {
-    padding: 10px 20px;
     background-color: #dc3545;
     color: white;
     border: none;
-    border-radius: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .logout-button:hover {
     background-color: #c82333;
 }
 
+/* === ADMIN PANEL STYLES === */
+/* Table Styles */
 .table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px;
+    border-collapse: collapse;
     margin-top: 20px;
 }
 
-.th {
+.th, .td {
+    padding: 12px;
     text-align: left;
-    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.th {
     background-color: #f8f9fa;
-    color: #2c3e50;
+    font-weight: bold;
 }
 
-.td {
-    padding: 15px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #dee2e6;
+/* User Status Badge Styles */
+.admin-badge {
+    background-color: #dc3545;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
 }
 
+.user-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* Delete Button Style */
 .delete-button {
-    padding: 8px 15px;
     background-color: #dc3545;
     color: white;
     border: none;
+    padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
 }
 
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+/* Create Form Styles */
 .create-form {
     background-color: #f8f9fa;
-    padding: 25px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    margin-top: 5px;
-}
-
-.submit-button {
-    padding: 12px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-}
-
-.login-container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    border-radius: 10px;
-}
-
-.login-header {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
-}
-
-.error-message {
-    color: #dc3545;
-    padding: 10px;
-    background-color: #f8d7da;
+    padding: 20px;
     border-radius: 4px;
     margin-bottom: 20px;
 }
 
-.admin-badge, .user-badge {
-    padding: 5px 10px;
-    border-radius: 15px;
-    color: white;
-    font-size: 0.9em;
+/* Main Content Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.admin-badge {
-    background-color: #28a745;
+.content {
+    margin-top: 20px;
 }
 
-.user-badge {
-    background-color: #17a2b8;
-}
+/* 
+=== INTEGRATION POINT FOR OTHER TEAMS ===
+Add your component styles below:
 
-.secondary {
-    background-color: #6c757d;
-    margin-top: 10px;
-}
+/* Location List Styles */
+/* .location-list {...} */
+/* .location-item {...} */
 
-.success-message {
-    color: #4CAF50;
-    background-color: #E8F5E9;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
+/* Map Styles */
+/* .map-container {...} */
+/* .map-marker {...} */
+
+/* Favorites Styles */
+/* .favorites-list {...} */
+/* .favorite-item {...} */
+
+/* Comment Styles */
+/* .comment-section {...} */
+/* .comment-item {...} */
+
