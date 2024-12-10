@@ -28,7 +28,7 @@ class Login extends React.Component {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
                 localStorage.setItem('isadmin', data.isadmin);
-                window.location.href = data.isadmin === 1 ? '/admin' : '/dashboard';
+                window.location.href = '/home' ;
             } else {
                 this.setState({ error: data.message });
             }
