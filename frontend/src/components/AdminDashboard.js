@@ -202,6 +202,7 @@ class AdminDashboard extends React.Component {
                             <div>
                                 <p><strong>Username:</strong> {this.state.selectedUser.username}</p>
                                 <p><strong>Password:</strong> {this.state.selectedUser.password}</p>
+                                <p><strong>Email:</strong> {this.state.selectedUser.email}</p>
                                 <p><strong>Role:</strong> {this.state.selectedUser.isadmin ? 'Admin' : 'User'}</p>
                             </div>
                         </div>
