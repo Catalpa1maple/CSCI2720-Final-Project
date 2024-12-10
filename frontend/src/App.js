@@ -42,10 +42,6 @@ class PrivateRoute extends React.Component {
                         return <Redirect to="/" />;
                     }
 
-                    if (adminRequired && !isAdmin) {
-                        return <Redirect to="/dashboard" />;
-                    }
-
                     return (
                         <>
                             <Navigation />
