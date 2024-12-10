@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
-import UserDashboard from './components/UserDashboard';
+import HomePage from './components/HomePage';
+import PublicHomePage from './components/PublicHomePage';
 import './loginpage.css';
 
 class App extends React.Component {
@@ -10,22 +11,22 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <Switch>
-                    <Route exact path="/" component={Login} />
-                    <PrivateRoute 
-                        path="/admin" 
-                        component={AdminDashboard} 
-                        adminRequired 
+                    <Route exact path="/" component={PublicHomePage} /> 
+                    <Route path="/login" component={Login} />
+                    <PrivateRoute
+                        path="/admin"
+                        component={AdminDashboard}
+                        adminRequired
                     />
-                    <PrivateRoute 
-                        path="/dashboard" 
-                        component={UserDashboard} 
+                    <PrivateRoute
+                        path="/home"
+                        component={HomePage}
                     />
                 </Switch>
             </BrowserRouter>
         );
     }
 }
-
 // Component to handle protected routes and authentication
 class PrivateRoute extends React.Component {
     render() {
@@ -73,6 +74,7 @@ class Navigation extends React.Component {
                 <div className="nav-brand">Location App</div>
                 <div className="nav-links">
                     {/*Demo */}
+                    <Link className="nav-link" to="/home">Home</Link>
                     <Link className="nav-link" to="/locations">Locations</Link>
                     <Link className="nav-link" to="/map">Map</Link>
                     <Link className="nav-link" to="/favorites">Favorites</Link>
