@@ -9,7 +9,13 @@ mongoose.connect('mongodb://localhost:27017/cs2720', {
 const UserSchema = new mongoose.Schema({
     username: String,
     password: String,
-    isadmin: Number
+    email: String,
+    isEmailVerified: Boolean,
+    isadmin: Number,
+    otp: {
+        code: String,
+        expiry: Date
+    }
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -24,7 +30,13 @@ const initializeDatabase = async () => {
         const admin = new User({
             username: 'admin',
             password: adminPassword,
-            isadmin: 1
+            email: 'admin@cs2720.com',
+            isEmailVerified: true,
+            isadmin: 1,
+            otp: {
+                code: null,
+                expiry: null
+            }
         });
         await admin.save();
 
@@ -33,7 +45,13 @@ const initializeDatabase = async () => {
         const user = new User({
             username: 'user',
             password: userPassword,
-            isadmin: 0
+            email: '',
+            isEmailVerified: false,
+            isadmin: 0,
+            otp: {
+                code: null,
+                expiry: null
+            }
         });
         await user.save();
 
