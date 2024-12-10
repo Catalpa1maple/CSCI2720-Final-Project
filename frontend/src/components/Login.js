@@ -1,18 +1,18 @@
 import React from 'react';
 
-// Component handling user authentication, registration and email verification
+// Main Login component handling authentication, registration, email verification and password recovery
 class Login extends React.Component {
-    // Initial state including email verification fields
+    // Initialize state for form inputs and view controls
     state = {
-        username: '',
-        password: '',
-        email: '',
-        error: '',
-        showRegister: false,
-        showEmailVerification: false,
-        showRegistrationOTP: false,
-        showForgotPassword: false,
-        otp: ''
+        username: '',        // Store username input
+        password: '',        // Store password input
+        email: '',          // Store email input
+        error: '',          // Store error/success messages
+        showRegister: false,          // Toggle registration form
+        showEmailVerification: false,  // Toggle email verification view
+        showRegistrationOTP: false,    // Toggle OTP verification after registration
+        showForgotPassword: false,     // Toggle password reset flow
+        otp: ''                        // Store OTP input
     }
 
     // Handle user login with email verification check
@@ -31,11 +31,13 @@ class Login extends React.Component {
             const data = await response.json();
             
             if (response.ok) {
+                // Store user data in localStorage and redirect
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('username', data.username);
                 localStorage.setItem('isadmin', data.isadmin);
                 window.location.href = '/home';
             } else if (data.requiresVerification) {
+                // Show email verification if required
                 this.setState({ 
                     showEmailVerification: true,
                     error: 'Please verify your email'
@@ -48,7 +50,7 @@ class Login extends React.Component {
         }
     }
 
-    // Handle new user registration with email
+    // Handle new user registration with email verification
     handleRegister = async (e) => {
         e.preventDefault();
         try {
@@ -65,6 +67,7 @@ class Login extends React.Component {
             const data = await response.json();
             
             if (response.ok) {
+                // Show OTP verification after successful registration
                 this.setState({ 
                     showRegistrationOTP: true,
                     error: 'Registration successful! Please enter the OTP sent to your email.'
@@ -77,7 +80,7 @@ class Login extends React.Component {
         }
     }
 
-    // Email verification handlers
+    // Handle email submission for verification
     handleEmailSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -91,6 +94,7 @@ class Login extends React.Component {
             });
             
             if (response.ok) {
+                // Show OTP input after email submission
                 this.setState({ 
                     error: 'OTP sent to your email',
                     showOTPInput: true 
@@ -104,6 +108,7 @@ class Login extends React.Component {
         }
     }
 
+    // Verify OTP for email verification
     handleOTPVerify = async (e) => {
         e.preventDefault();
         try {
@@ -117,6 +122,7 @@ class Login extends React.Component {
             });
             
             if (response.ok) {
+                // Reset verification views after successful verification
                 this.setState({ 
                     showEmailVerification: false,
                     showRegistrationOTP: false,
@@ -131,7 +137,7 @@ class Login extends React.Component {
         }
     }
 
-    // Password reset handlers
+    // Initiate password reset process
     handleForgotPassword = async (e) => {
         e.preventDefault();
         try {
@@ -144,6 +150,7 @@ class Login extends React.Component {
             const data = await response.json();
             
             if (response.ok) {
+                // Show OTP input for password reset
                 this.setState({ 
                     showOTPInput: true,
                     error: 'OTP sent to your registered email'
@@ -156,6 +163,7 @@ class Login extends React.Component {
         }
     }
 
+    // Complete password reset with OTP verification
     handleResetPassword = async (e) => {
         e.preventDefault();
         try {
@@ -170,6 +178,7 @@ class Login extends React.Component {
             });
             
             if (response.ok) {
+                // Reset views after successful password reset
                 this.setState({
                     showForgotPassword: false,
                     showOTPInput: false,
@@ -184,9 +193,9 @@ class Login extends React.Component {
         }
     }
 
-    // Render different views based on state
     render() {
-        if (this.state.showRegistrationOTP || this.state.showEmailVerification) {
+        // Render OTP verification view after registration
+        if (this.state.showRegistrationOTP) {
             return (
                 <div className="login-container">
                     <h2 className="login-header">Verify Email</h2>
@@ -195,7 +204,44 @@ class Login extends React.Component {
                             {this.state.error}
                         </div>
                     )}
+                    <form onSubmit={this.handleOTPVerify}>
+                        <div className="form-group">
+                            <label>Enter OTP:</label>
+                            <input
+                                type="text"
+                                value={this.state.otp}
+                                onChange={(e) => this.setState({ otp: e.target.value })}
+                                required
+                                className="input"
+                                maxLength="6"
+                            />
+                        </div>
+                        <button type="submit" className="submit-button">
+                            Verify OTP
+                        </button>
+                    </form>
+                    <button 
+                        onClick={this.handleResendOTP}
+                        className="submit-button secondary"
+                    >
+                        Resend OTP
+                    </button>
+                </div>
+            );
+        }
+
+        // Render email verification view
+        if (this.state.showEmailVerification) {
+            return (
+                <div className="login-container">
+                    <h2 className="login-header">Email Verification Required</h2>
+                    {this.state.error && (
+                        <div className={this.state.error.includes('successful') ? 'success-message' : 'error-message'}>
+                            {this.state.error}
+                        </div>
+                    )}
                     {!this.state.showOTPInput ? (
+                        // Email input form
                         <form onSubmit={this.handleEmailSubmit}>
                             <div className="form-group">
                                 <label>Enter Your Email:</label>
@@ -212,6 +258,7 @@ class Login extends React.Component {
                             </button>
                         </form>
                     ) : (
+                        // OTP verification form
                         <form onSubmit={this.handleOTPVerify}>
                             <div className="form-group">
                                 <label>Enter OTP:</label>
@@ -233,7 +280,73 @@ class Login extends React.Component {
             );
         }
 
-        // Main login/register form
+        // Render password reset view
+        if (this.state.showForgotPassword) {
+            return (
+                <div className="login-container">
+                    <h2 className="login-header">Reset Password</h2>
+                    {this.state.error && (
+                        <div className={this.state.error.includes('successful') ? 'success-message' : 'error-message'}>
+                            {this.state.error}
+                        </div>
+                    )}
+                    {!this.state.showOTPInput ? (
+                        // Username input for password reset
+                        <form onSubmit={this.handleForgotPassword}>
+                            <div className="form-group">
+                                <label>Username:</label>
+                                <input
+                                    type="text"
+                                    value={this.state.username}
+                                    onChange={(e) => this.setState({ username: e.target.value })}
+                                    required
+                                    className="input"
+                                />
+                            </div>
+                            <button type="submit" className="submit-button">
+                                Send OTP
+                            </button>
+                        </form>
+                    ) : (
+                        // OTP and new password input form
+                        <form onSubmit={this.handleResetPassword}>
+                            <div className="form-group">
+                                <label>Enter OTP:</label>
+                                <input
+                                    type="text"
+                                    value={this.state.otp}
+                                    onChange={(e) => this.setState({ otp: e.target.value })}
+                                    required
+                                    className="input"
+                                    maxLength="6"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>New Password:</label>
+                                <input
+                                    type="password"
+                                    value={this.state.password}
+                                    onChange={(e) => this.setState({ password: e.target.value })}
+                                    required
+                                    className="input"
+                                />
+                            </div>
+                            <button type="submit" className="submit-button">
+                                Reset Password
+                            </button>
+                        </form>
+                    )}
+                    <button 
+                        onClick={() => this.setState({ showForgotPassword: false })}
+                        className="submit-button secondary"
+                    >
+                        Back to Login
+                    </button>
+                </div>
+            );
+        }
+
+        // Render main login/register form
         return (
             <div className="login-container">
                 <h2 className="login-header">
