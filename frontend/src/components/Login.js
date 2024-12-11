@@ -193,6 +193,28 @@ class Login extends React.Component {
         }
     }
 
+
+    // Add the new handleResendOTP method here
+    handleResendOTP = async () => {
+        try {
+            const response = await fetch('http://localhost:5001/api/resend-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: this.state.username }),
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                this.setState({ error: 'New OTP sent successfully' });
+            } else {
+                this.setState({ error: data.message });
+            }
+        } catch (err) {
+            this.setState({ error: 'Failed to resend OTP' });
+        }
+    }
+
     render() {
         // Render OTP verification view after registration
         if (this.state.showRegistrationOTP) {
@@ -273,6 +295,10 @@ class Login extends React.Component {
                             </div>
                             <button type="submit" className="submit-button">
                                 Verify OTP
+                            </button>
+                            {/*For uers to resend OTP */}
+                            <button onClick={this.handleResendOTP} className="submit-button secondary">
+                                Resend OTP
                             </button>
                         </form>
                     )}

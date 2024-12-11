@@ -20,7 +20,7 @@ class EmailService {
             from: 'csci2720host@gmail.com',
             to: email,
             subject: 'Your OTP for verification',
-            text: `Your OTP is: ${otp}. Valid for 10 minutes.`
+            text: `Your OTP is: ${otp}. Valid for 5 minutes.`
         };
         
         return await this.transporter.sendMail(mailOptions);

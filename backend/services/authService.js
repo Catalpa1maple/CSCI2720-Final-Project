@@ -21,18 +21,22 @@ class AuthService {
 
   async handleVerifyEmail(username, otp) {
     const user = await User.findOne({ username });
-    if (!user || user.otp.code !== otp || user.otp.expiry < new Date()) {
-      throw new Error('Invalid or expired OTP');
+    const now = new Date();
+    now.setUTCHours(now.getUTCHours() + 8); // Adjust current time to HK timezone
+    
+    if (!user || user.otp.code !== otp || user.otp.expiry < now) {
+        throw new Error('Invalid or expired OTP');
     }
 
     await User.updateOne(
-      { username },
-      {
-        isEmailVerified: true,
-        otp: { code: null, expiry: null }
-      }
+        { username },
+        {
+            isEmailVerified: true,
+            otp: { code: null, expiry: null }
+        }
     );
-  }
+}
+
 
   async handleForgotPassword(username) {
     const user = await User.findOne({ username });
@@ -71,7 +75,7 @@ class AuthService {
   async handleResendOTP(username) {
     const user = await User.findOne({ username });
     if (!user || !user.email) {
-      throw new Error('User not found');
+        throw new Error('User not found');
     }
 
     const otp = emailService.generateOTP();
@@ -79,12 +83,13 @@ class AuthService {
     otpExpiry.setUTCHours(otpExpiry.getUTCHours() + 8); // Adjust to Hong Kong timezone (UTC+8)
 
     await User.updateOne(
-      { username },
-      { otp: { code: otp, expiry: otpExpiry } }
+        { username },
+        { otp: { code: otp, expiry: otpExpiry } }
     );
 
     await emailService.sendOTP(user.email, otp);
-  }
+}
+
 }
 
 module.exports = new AuthService();
