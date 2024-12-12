@@ -1,12 +1,12 @@
 const nodemailer = require('nodemailer');
-
+require('dotenv').config({ path: './services/OTP_host_email_config.env' });
 class EmailService {
     constructor() {
         this.transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'csci2720host@gmail.com',
-                pass: 'fqzi tdqk fjiu vhbn'
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_APP_PASSWORD
             }
         });
     }
@@ -17,7 +17,7 @@ class EmailService {
 
     async sendOTP(email, otp) {
         const mailOptions = {
-            from: 'csci2720host@gmail.com',
+            from: process.env.EMAIL_USER,
             to: email,
             subject: 'Your OTP for verification',
             text: `Your OTP is: ${otp}. Valid for 5 minutes.`
@@ -26,5 +26,4 @@ class EmailService {
         return await this.transporter.sendMail(mailOptions);
     }
 }
-
 module.exports = new EmailService();
