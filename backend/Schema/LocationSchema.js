@@ -1,21 +1,12 @@
+// venueSchema.js
 const mongoose = require('mongoose');
 
-class LocationSchema extends mongoose.Schema {
-    constructor() {
-        super({
-            name: String,
-            coordinates: { 
-                lat: Number, 
-                lng: Number 
-            },
-            description: String,
-            category: String,
-            events: [{ 
-                type: mongoose.Schema.Types.ObjectId, 
-                ref: 'Event' 
-            }]
-        });
-    }
-}
+const venueSchema = new mongoose.Schema({
+  id: String,
+  name: String,
+  latitude: String,
+  longitude: String
+});
 
-module.exports = mongoose.model('Location', new LocationSchema());
+const Venue = mongoose.model('Venue', venueSchema);
+module.exports = Venue;

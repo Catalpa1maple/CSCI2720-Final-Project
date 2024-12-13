@@ -1,17 +1,14 @@
 const mongoose = require('mongoose');
 
-class EventSchema extends mongoose.Schema {
-    constructor() {
-        super({
-            name: String,
-            date: Date,
-            description: String,
-            location: { 
-                type: mongoose.Schema.Types.ObjectId, 
-                ref: 'Location' 
-            }
-        });
-    }
-}
+const eventSchema = new mongoose.Schema({
+  eventID: String,
+  title: String,
+  venue: Number,
+  date: String,
+  description: String,
+  presenter: String,
+  price: String
+});
 
-module.exports = mongoose.model('Event', new EventSchema());
+const Event = mongoose.model('Event', eventSchema);
+module.exports = Event;

@@ -2,18 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const xml2js = require('xml2js');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const bcrypt = require('bcryptjs');
 const authService = require('./services/authService');
+
+
 
 // Import Account Schema for user management
 const User = require('./Schema/AccountSchema');
 
-/* DEMO CODE - NOT ACCOUNT RELATED
+// Import Location Schema for location management
 const Location = require('./Schema/LocationSchema');
-const Comment = require('./Schema/CommentSchema');
+
+//import Event Schema for event management
 const Event = require('./Schema/EventSchema');
-const FavouriteLocation = require('./Schema/FavouriteLocationSchema');
-*/
 
 class Server {
     constructor() {
@@ -21,6 +24,7 @@ class Server {
         this.setupMiddleware();
         this.connectDatabase();
         this.setupRoutes();
+        this.initializeData();
         this.startServer();
     }
 
@@ -45,7 +49,9 @@ class Server {
         this.app.delete('/api/users/:username', this.deleteUser); 
         this.app.get('/api/users/:username/info', this.getUserInfo); 
         this.app.put('/api/users/:username/password', this.updateUserPassword);
+        
 
+        // Login Page and Admin Page Setting (Section Start)
         // Email Verification Routes
         this.app.post('/api/update-email', async (req, res) => {
             try {
@@ -91,8 +97,33 @@ class Server {
                 res.status(404).json({ message: error.message });
             }
         });
+        //Login Page and Admin Page (Section End)
+
+
+        // Event Page Setting (Section Start)
+        this.app.get('/venues', async (req, res) => {
+            try {
+                const venues = await Location.find().limit(10);
+                
+                const venueEventCounts = await Promise.all(venues.map(async venue => {
+                    const eventCount = await Event.countDocuments({ venue: venue.id });
+                    return {
+                        id: venue.id,
+                        name: venue.name,
+                        eventCount: eventCount
+                    };
+                }));
+        
+                res.json(venueEventCounts);
+            } catch (error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+        // Event Page Setting (Section End)
+
     }
 
+    // Function to handle user login and admin page (Section Start)
     async handleLogin(req, res) {
         const { username, password } = req.body;
         try {
@@ -226,7 +257,73 @@ class Server {
             res.status(500).json({ message: 'Server error' });
         }
     }
+    // Function to handle login page and admin page (Section End)
 
+    // Even and Location Page (Section Start)
+    async initializeData() {
+        try {
+            const venueResponse = await fetch("https://www.lcsd.gov.hk/datagovhk/event/venues.xml");
+            const venueData = await venueResponse.text();
+            const venueParser = new xml2js.Parser();
+            const venueResult = await venueParser.parseStringPromise(venueData);
+            const venues = venueResult.venues.venue;
+            const validVenues = [];
+    
+            venues.forEach(venue => {
+                const latitude = venue.latitude ? venue.latitude[0] : 'N/A';
+                const longitude = venue.longitude ? venue.longitude[0] : 'N/A';
+    
+                if (latitude !== '' && longitude !== '') {
+                    validVenues.push({
+                        id: venue.$.id,
+                        name: venue.venuee ? venue.venuee[0] : 'N/A',
+                        latitude: latitude,
+                        longitude: longitude
+                    });
+                }
+            });
+    
+            const eventResponse = await fetch("https://www.lcsd.gov.hk/datagovhk/event/events.xml");
+            const eventData = await eventResponse.text();
+            const eventParser = new xml2js.Parser();
+            const eventResult = await eventParser.parseStringPromise(eventData);
+            const events = eventResult.events.event;
+            const eventArray = Array.isArray(events) ? events : [events];
+    
+            const venueEventCount = {};
+            eventArray.forEach(event => {
+                const venueId = event.venueid ? event.venueid[0] : null;
+                if (venueId) {
+                    venueEventCount[venueId] = (venueEventCount[venueId] || 0) + 1;
+                }
+            });
+    
+            const venuesWithAtLeastThreeEvents = validVenues.filter(venue =>
+                venueEventCount[venue.id] >= 3
+            );
+    
+            const firstTenVenues = venuesWithAtLeastThreeEvents.slice(0, 10);
+            await Location.insertMany(firstTenVenues);
+    
+            const eventsForVenue = firstTenVenues.flatMap(venue => {
+                const eventsForThisVenue = eventArray.filter(event => event.venueid[0] == venue.id);
+                return eventsForThisVenue.map(event => ({
+                    eventID: event.$.id,
+                    title: event.titlee ? event.titlee[0] : 'N/A',
+                    venue: parseInt(event.venueid[0]),
+                    date: event.predateE ? event.predateE[0] : 'N/A',
+                    description: event.desce ? event.desce[0] : 'N/A',
+                    presenter: event.presenterorge ? event.presenterorge[0] : 'N/A',
+                    price: event.pricee ? event.pricee[0] : 'N/A'
+                }));
+            });
+    
+            await Event.insertMany(eventsForVenue);
+        } catch (error) {
+            console.error('Error during data initialization:', error);
+        }
+    }
+    // Even and Location Page (Section End)
     startServer() {
         this.app.listen(5001, () => console.log('Server running on port 5001'));
     }

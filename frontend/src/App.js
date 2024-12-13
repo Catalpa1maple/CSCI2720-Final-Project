@@ -4,6 +4,7 @@ import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
 import HomePage from './components/HomePage';
 import PublicHomePage from './components/PublicHomePage';
+import venues from './components/Locations';
 import './loginpage.css';
 
 class App extends React.Component {
@@ -22,11 +23,16 @@ class App extends React.Component {
                         path="/home"
                         component={HomePage}
                     />
+                    <PrivateRoute
+                        path="/locations"
+                        component={venues}
+                    />
                 </Switch>
             </BrowserRouter>
         );
     }
 }
+
 // Component to handle protected routes and authentication
 class PrivateRoute extends React.Component {
     render() {
