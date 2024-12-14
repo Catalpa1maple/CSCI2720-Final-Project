@@ -6,7 +6,7 @@ const xml2js = require('xml2js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const bcrypt = require('bcryptjs');
 const authService = require('./services/authService');
-
+const FavouriteLocation = require('./Schema/FavouriteLocationSchema');
 
 
 // Import Account Schema for user management
@@ -121,7 +121,96 @@ class Server {
         });
         // Event Page Setting (Section End)
 
+        // Add to favourites_Section Start
+        this.app.post('/api/favourites/add', async (req, res) => {
+            try {
+                const { username, locationId } = req.body;
+                
+                // Check if already favourited
+                const existingFavourite = await FavouriteLocation.findOne({ 
+                    username, 
+                    locationId 
+                });
+                
+                if (existingFavourite) {
+                    return res.status(400).json({ 
+                        message: 'Location already in favourites' 
+                    });
+                }
+        
+                // Create new favourite
+                const newFavourite = new FavouriteLocation({ 
+                    username, 
+                    locationId 
+                });
+                await newFavourite.save();
+                
+                res.status(201).json({ 
+                    message: 'Added to favourites successfully' 
+                });
+            } catch (error) {
+                res.status(500).json({ 
+                    message: 'Server error', 
+                    error: error.message 
+                });
+            }
+        });
+        
+        this.app.post('/api/favourites/remove', async (req, res) => {
+            try {
+                const { username, locationId } = req.body;
+                
+                await FavouriteLocation.findOneAndDelete({ 
+                    username, 
+                    locationId 
+                });
+                
+                res.json({ 
+                    message: 'Removed from favourites successfully' 
+                });
+            } catch (error) {
+                res.status(500).json({ 
+                    message: 'Server error', 
+                    error: error.message 
+                });
+            }
+        });
+        
+        this.app.get('/api/favourites/:username', async (req, res) => {
+            try {
+                const username = req.params.username;
+                
+                // Find all favourites for the user
+                const favourites = await FavouriteLocation.find({ username });
+                
+                // Get the full location details for each favourite
+                const favouriteLocations = await Promise.all(
+                    favourites.map(async (fav) => {
+                        const location = await Location.findOne({ id: fav.locationId });
+                        if (location) {
+                            const eventCount = await Event.countDocuments({ venue: location.id });
+                            return {
+                                id: location.id,
+                                name: location.name,
+                                eventCount: eventCount,
+                                dateAdded: fav.dateAdded
+                            };
+                        }
+                        return null;
+                    })
+                );
+        
+                // Filter out any null values and send response
+                res.json(favouriteLocations.filter(loc => loc !== null));
+            } catch (error) {
+                res.status(500).json({ 
+                    message: 'Server error', 
+                    error: error.message 
+                });
+            }
+        });
     }
+    // Add to favourites_Section End
 
     // Function to handle user login and admin page (Section Start)
     async handleLogin(req, res) {

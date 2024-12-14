@@ -5,6 +5,7 @@ import AdminDashboard from './components/AdminDashboard';
 import HomePage from './components/HomePage';
 import PublicHomePage from './components/PublicHomePage';
 import venues from './components/Locations';
+import Favourites from './components/Favourites';
 import './loginpage.css';
 
 class App extends React.Component {
@@ -26,6 +27,10 @@ class App extends React.Component {
                     <PrivateRoute
                         path="/locations"
                         component={venues}
+                    />
+                    <PrivateRoute
+                        path="/favourites"
+                        component={Favourites}
                     />
                 </Switch>
             </BrowserRouter>
@@ -79,7 +84,7 @@ class Navigation extends React.Component {
                     <Link className="nav-link" to="/home">Home</Link>
                     <Link className="nav-link" to="/locations">Locations</Link>
                     <Link className="nav-link" to="/map">Map</Link>
-                    <Link className="nav-link" to="/favorites">Favorites</Link>
+                    <Link className="nav-link" to="/favourites">Favourites</Link>
                     
                     {isAdmin && (
                         <Link className="nav-link" to="/admin">Admin Panel</Link>
