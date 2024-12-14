@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const VenuesTable = () => {
     const [venues, setVenues] = useState([]);
@@ -75,7 +76,11 @@ const VenuesTable = () => {
                     {venues.map((venue) => (
                         <tr key={venue.id}>
                             <td>{venue.id}</td>
-                            <td>{venue.name}</td>
+                            <td>
+                                <Link to={`/venues/${venue.id}/comments`}>
+                                    {venue.name}
+                                </Link>
+                            </td>
                             <td>{venue.eventCount}</td>
                             <td>
                                 <Button
