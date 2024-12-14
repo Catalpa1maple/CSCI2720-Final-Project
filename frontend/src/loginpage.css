@@ -353,6 +353,143 @@ body {
     background: #2980b9;
 }
 
+/* Event Management Section Admin page (Section Start)*/
+.event-management {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+.event-management h3 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.event-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.crud-button {
+    padding: 0.8rem 1.5rem;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    flex: 1;
+}
+
+.crud-button.create-button { 
+    background: #3498db;
+}
+.crud-button.create-button:hover { 
+    background: #2980b9; 
+}
+
+.crud-button.read-button { 
+    background: #9b59b6;
+}
+.crud-button.read-button:hover { 
+    background: #8e44ad; 
+}
+
+.crud-button.update-button { 
+    background: #f1c40f;
+}
+.crud-button.update-button:hover { 
+    background: #f39c12; 
+}
+
+.crud-button.delete-button { 
+    background: #e74c3c;
+}
+.crud-button.delete-button:hover { 
+    background: #c0392b; 
+}
+
+.event-details {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+.event-details h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.event-details p {
+    margin-bottom: 0.8rem;
+    color: #34495e;
+    line-height: 1.5;
+}
+
+.event-details strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.event-error-message {
+    color: white;
+    background-color: #e74c3c;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.modal-content form input,
+.modal-content form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.modal-content form input:focus,
+.modal-content form textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.form-buttons button {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    color: white;
+}
+
+.form-buttons button[type="submit"] {
+    background: #3498db;
+}
+
+.form-buttons button[type="button"] {
+    background: #95a5a6;
+}
+/* Event Management Section Admin page (Section End)*/
+
 /* Favourites Styles */
 .favourites-container {
     padding: 2rem;

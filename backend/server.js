@@ -97,6 +97,81 @@ class Server {
                 res.status(404).json({ message: error.message });
             }
         });
+
+           // Event Management Routes
+           this.app.post('/api/events', async (req, res) => {
+            try {
+                const { eventID, title, venue, date, description, presenter, price } = req.body;
+                
+                const newEvent = new Event({
+                    eventID,
+                    title,
+                    venue: parseInt(venue),
+                    date,
+                    description,
+                    presenter,
+                    price
+                });
+                
+                await newEvent.save();
+                res.status(201).json({ message: 'Event created successfully', event: newEvent });
+            } catch (error) {
+                res.status(500).json({ message: 'Failed to create event', error: error.message });
+            }
+        });
+        
+
+        this.app.get('/api/events/:eventID', async (req, res) => {
+            try {
+                const event = await Event.findOne({ eventID: req.params.eventID });
+                if (!event) {
+                    return res.status(404).json({ message: 'Event not found' });
+                }
+                res.json(event);
+            } catch (error) {
+                res.status(500).json({ message: 'Failed to fetch event', error: error.message });
+            }
+        });
+
+        this.app.put('/api/events/:eventID', async (req, res) => {
+            try {
+                const updateData = {};
+                const fields = ['title', 'venue', 'date', 'description', 'presenter', 'price'];
+                
+                fields.forEach(field => {
+                    if (req.body[field]) {
+                        updateData[field] = field === 'venue' ? parseInt(req.body[field]) : req.body[field];
+                    }
+                });
+
+                const event = await Event.findOneAndUpdate(
+                    { eventID: req.params.eventID },
+                    updateData,
+                    { new: true }
+                );
+
+                if (!event) {
+                    return res.status(404).json({ message: 'Event not found' });
+                }
+                
+                res.json({ message: 'Event updated successfully', event });
+            } catch (error) {
+                res.status(500).json({ message: 'Failed to update event', error: error.message });
+            }
+        });
+
+        this.app.delete('/api/events/:eventID', async (req, res) => {
+            try {
+                const event = await Event.findOneAndDelete({ eventID: req.params.eventID });
+                if (!event) {
+                    return res.status(404).json({ message: 'Event not found' });
+                }
+                res.json({ message: 'Event deleted successfully' });
+            } catch (error) {
+                res.status(500).json({ message: 'Failed to delete event', error: error.message });
+            }
+        });
+
         //Login Page and Admin Page (Section End)
 
 
