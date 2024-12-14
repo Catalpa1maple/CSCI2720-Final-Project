@@ -9,7 +9,7 @@ class CommentSchema extends mongoose.Schema {
             },
             location: { 
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: 'Location' 
+                ref: 'Venue'  // Change from 'Location' to 'Venue'
             },
             content: String,
             timestamp: { 

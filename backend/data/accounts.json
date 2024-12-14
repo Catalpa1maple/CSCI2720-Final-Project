@@ -20,5 +20,16 @@
       "code": null,
       "expiry": null
     }
+  },
+  {
+    "username": "usertest",
+    "password": "$2a$10$94L2/FdGJ2GHWd5bJGEsou2hsFy1bQ2mKyB2GlBVdWSX3Exf4R/eS",
+    "email": "csci2720host@gmail.com",
+    "isEmailVerified": true,
+    "isadmin": 0,
+    "otp": {
+      "code": null,
+      "expiry": null
+    }
   }
 ]

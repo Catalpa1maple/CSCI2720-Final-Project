@@ -6,6 +6,7 @@ const xml2js = require('xml2js');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 const bcrypt = require('bcryptjs');
 const authService = require('./services/authService');
+const Comment = require('./Schema/CommentSchema');
 const FavouriteLocation = require('./Schema/FavouriteLocationSchema');
 
 
@@ -284,9 +285,52 @@ class Server {
                 });
             }
         });
-    }
-    // Add to favourites_Section End
+        // Add to favourites_Section End
 
+        this.app.get('/api/venues/:id/comments', async (req, res) => {
+            try {
+            const location = await Location.findOne({ id: req.params.id });
+            const comments = await Comment.find({ location: location._id })
+                .populate('user', 'username')
+                .sort({ timestamp: -1 });
+                const formattedComments = comments.map(comment => ({
+                    _id: comment._id,
+                    user: comment.user.username,
+                    content: comment.content,
+                    timestamp: comment.timestamp
+                }));
+                
+                res.json(formattedComments);
+            } catch (error) {
+                console.error('Error:', error);
+                res.status(500).json({ message: 'Error fetching comments' });
+            }
+        });
+    
+        // Add a new comment to a venue
+        this.app.post('/api/venues/:id/comments', async (req, res) => {
+            try {
+                const user = await User.findOne({ username: req.body.username });
+                const location = await Location.findOne({ id: req.params.id });
+        
+                const newComment = new Comment({
+                    user: user._id,
+                    location: location._id,
+                    content: req.body.content
+                });
+        
+                await newComment.save();
+                res.status(201).json({ message: 'Comment added successfully' });
+            } catch (error) {
+                res.status(500).json({ message: 'Error adding comment' });
+            }
+        }); 
+        
+    }
+    
+
+    
+    
     // Function to handle user login and admin page (Section Start)
     async handleLogin(req, res) {
         const { username, password } = req.body;

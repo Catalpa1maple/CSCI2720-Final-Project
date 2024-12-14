@@ -6,6 +6,7 @@ import HomePage from './components/HomePage';
 import PublicHomePage from './components/PublicHomePage';
 import venues from './components/Locations';
 import Favourites from './components/Favourites';
+import VenueComments from './components/VenueComments';
 import './loginpage.css';
 
 class App extends React.Component {
@@ -28,6 +29,12 @@ class App extends React.Component {
                         path="/locations"
                         component={venues}
                     />
+
+                    <PrivateRoute
+                        path="/venues/:id/comments"
+                        component={VenueComments}
+                    />
+
                     <PrivateRoute
                         path="/favourites"
                         component={Favourites}

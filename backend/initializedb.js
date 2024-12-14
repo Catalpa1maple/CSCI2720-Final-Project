@@ -63,6 +63,11 @@ const initializeDatabase = async () => {
     } catch (error) {
         console.error('Error initializing database:', error);
     }
+
+    // Create comments collection
+    await mongoose.connection.createCollection('comments');
+    console.log('Comments collection created successfully!');
+
 };
 
 initializeDatabase();
