@@ -390,8 +390,25 @@ class Server {
             const venuesWithAtLeastThreeEvents = validVenues.filter(venue =>
                 venueEventCount[venue.id] >= 3
             );
+            const discreteLocationSet = new Set();
+            const discreteLocation = [];
+
+            // To elimate the location with the simliar location (same building)
+            venuesWithAtLeastThreeEvents.forEach(venue => {
+                const latLongPair = `${venue.latitude},${venue.longitude}`;
     
-            const firstTenVenues = venuesWithAtLeastThreeEvents.slice(0, 10);
+                if (!discreteLocationSet.has(latLongPair)) {
+                    discreteLocationSet.add(latLongPair);
+                    discreteLocation.push({
+                        id: venue.id,
+                        name: venue.name,
+                        latitude: venue.latitude,
+                        longitude: venue.longitude
+                    });
+                }
+            });
+
+            const firstTenVenues = discreteLocation.slice(0, 10);
             await Location.insertMany(firstTenVenues);
     
             const eventsForVenue = firstTenVenues.flatMap(venue => {
@@ -412,7 +429,7 @@ class Server {
             console.error('Error during data initialization:', error);
         }
     }
-    // Even and Location Page (Section End)
+    // Event and Location Page (Section End)
     startServer() {
         this.app.listen(5001, () => console.log('Server running on port 5001'));
     }
