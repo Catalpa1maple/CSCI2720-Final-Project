@@ -51,7 +51,7 @@ const Favourites = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>Venue Id</th>
+                        <th>Venue ID</th>
                         <th>Venue Name</th>
                         <th>Number of Events</th>
                         <th>Date Added</th>
