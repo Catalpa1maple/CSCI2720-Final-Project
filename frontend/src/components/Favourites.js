@@ -51,6 +51,7 @@ const Favourites = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
+                        <th>Venue Id</th>
                         <th>Venue Name</th>
                         <th>Number of Events</th>
                         <th>Date Added</th>
@@ -60,6 +61,7 @@ const Favourites = () => {
                 <tbody>
                     {favourites.map(location => (
                         <tr key={location.id}>
+                            <td>{location.id}</td>
                             <td>{location.name}</td>
                             <td>{location.eventCount}</td>
                             <td>{new Date(location.dateAdded).toLocaleDateString()}</td>
