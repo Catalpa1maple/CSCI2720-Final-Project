@@ -7,7 +7,7 @@ import PublicHomePage from './components/PublicHomePage';
 import venues from './components/Locations';
 import Favourites from './components/Favourites';
 import VenueComments from './components/VenueComments';
-import map from "./components/map"
+import Map from "./components/map"
 import './loginpage.css';
 
 // Theme Context
@@ -117,17 +117,17 @@ class Navigation extends React.Component {
 
         return (
             <nav className="navbar">
-                <div className="nav-brand">Location App</div>
+                <div className="nav-brand">LOCATIONS APP</div>
                 <div className="nav-links">
-                    <Link className="nav-link" to="/home">Home</Link>
-                    <Link className="nav-link" to="/locations">Locations</Link>
-                    <Link className="nav-link" to="/map">Map</Link>
+                    <Link className="nav-link" to="/home">HOME</Link>
+                    <Link className="nav-link" to="/locations">LOCATIONS</Link>
+                    <Link className="nav-link" to="/map">MAP</Link>
                     
                     {isAuthenticated && (
                         <>
-                            <Link className="nav-link" to="/favourites">Favourites</Link>
+                            <Link className="nav-link" to="/favourites">FAVOURITE</Link>
                             {isAdmin && (
-                                <Link className="nav-link" to="/admin">Admin Panel</Link>
+                                <Link className="nav-link" to="/admin">ADMIN PANEL</Link>
                             )}
                         </>
                     )}
@@ -141,11 +141,11 @@ class Navigation extends React.Component {
                             <div className="user-info">
                                 <span>Welcome, {username}</span>
                                 <button onClick={this.handleLogout} className="logout-button">
-                                    Logout
+                                    LOGOUT
                                 </button>
                             </div>
                         ) : (
-                            <Link to="/login" className="login-button">Login</Link>
+                            <Link to="/login" className="login-nav-button">LOGIN</Link>
                         )}
                     </div>
                 </div>

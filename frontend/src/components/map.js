@@ -43,7 +43,7 @@ const MapComponent = () => {
 
     // Adjust the height to account for navbar
     return <div> 
-        <div id="canva" style={{ height: 'calc(100vh - 60px)', width: '100vw', padding: '60px' }}> </div>
+        <div id="canva" style={{ height: '100vh', width: '100vw'}}> </div>
     </div>;
 };
 
