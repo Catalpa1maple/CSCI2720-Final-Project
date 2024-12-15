@@ -7,6 +7,8 @@ class AdminDashboard extends React.Component {
         selectedUser: null,
         showUserInfo: false,
         showUpdatePassword: false,
+        showUpdatePasswordForm: false,
+        selectedUsername: null,
         createError: '',
 
         //Event Management
@@ -95,45 +97,93 @@ class AdminDashboard extends React.Component {
 
     // Update user password
     handleUpdatePassword = async (username) => {
-        const newPassword = prompt('Enter new password:');
-        if (!newPassword) return;
-
+        this.setState({ 
+            showUpdatePasswordForm: true, 
+            selectedUsername: username 
+        });
+    }
+    
+    handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
+        existingMessages.forEach(msg => msg.remove());
+    
+        const formData = new FormData(e.target);
+        const newPassword = formData.get('newPassword');
+    
         try {
-            const response = await fetch(`http://localhost:5001/api/users/${username}/password`, {
+            const response = await fetch(`http://localhost:5001/api/users/${this.state.selectedUsername}/password`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ newPassword })
             });
             
             if (response.ok) {
-                alert('Password updated successfully');
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = 'Password updated successfully';
+                e.target.prepend(successDiv);
+                setTimeout(() => this.setState({ showUpdatePasswordForm: false }), 2000);
+            } else {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = 'Password update failed';
+                e.target.prepend(errorDiv);
             }
-        } catch (err) {
-            alert('Failed to update password');
+        } catch (error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Failed to update password';
+            e.target.prepend(errorDiv);
         }
     }
+    
 
     //Event Management
     handleCreateEvent = async (e) => {
         e.preventDefault();
+        const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
+        existingMessages.forEach(msg => msg.remove());
+        
         const formData = new FormData(e.target);
+        const eventData = Object.fromEntries(formData);
+        
         try {
+            const checkResponse = await fetch(`http://localhost:5001/api/events/${eventData.eventID}`);
+            if (checkResponse.ok) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = 'Event ID already exists';
+                e.target.prepend(errorDiv);
+                return;
+            }
+    
             const response = await fetch('http://localhost:5001/api/events', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(Object.fromEntries(formData))
+                body: JSON.stringify(eventData)
             });
+    
             if (response.ok) {
-                alert('Event created successfully');
-                this.setState({ showCreateEventForm: false });
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = 'Event created successfully';
+                e.target.prepend(successDiv);
+                setTimeout(() => this.setState({ showCreateEventForm: false }), 2000);
             }
         } catch (error) {
-            alert('Failed to create event');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Failed to create event';
+            e.target.prepend(errorDiv);
         }
     }
     
     handleReadEvent = async (e) => {
         e.preventDefault();
+        const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
+        existingMessages.forEach(msg => msg.remove());
+        
         const formData = new FormData(e.target);
         const eventID = formData.get('eventID');
         
@@ -142,30 +192,30 @@ class AdminDashboard extends React.Component {
             const data = await response.json();
             
             if (response.ok && data) {
-                this.setState({ 
-                    selectedEvent: data,
-                    eventError: '',
-                    showReadEventForm: true
-                });
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = 'Event found successfully';
+                e.target.prepend(successDiv);
+                this.setState({ selectedEvent: data, showReadEventForm: true });
             } else {
-                this.setState({ 
-                    eventError: 'Event not found', 
-                    selectedEvent: null,
-                    showReadEventForm: true
-                });
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = 'Event not found';
+                e.target.prepend(errorDiv);
             }
         } catch (error) {
-            this.setState({ 
-                eventError: 'Failed to read event',
-                selectedEvent: null,
-                showReadEventForm: true
-            });
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Failed to read event';
+            e.target.prepend(errorDiv);
         }
     }
     
-    
     handleUpdateEvent = async (e) => {
         e.preventDefault();
+        const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
+        existingMessages.forEach(msg => msg.remove());
+        
         const formData = new FormData(e.target);
         const eventID = formData.get('eventID');
         
@@ -177,27 +227,30 @@ class AdminDashboard extends React.Component {
             });
             
             if (response.ok) {
-                this.setState({ 
-                    eventError: '',
-                    showUpdateEventForm: false
-                });
-                alert('Event updated successfully');
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = 'Event updated successfully';
+                e.target.prepend(successDiv);
+                setTimeout(() => this.setState({ showUpdateEventForm: false }), 2000);
             } else {
-                this.setState({ 
-                    eventError: 'Event not found or update failed',
-                    showUpdateEventForm: true
-                });
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = 'Event not found or update failed';
+                e.target.prepend(errorDiv);
             }
         } catch (error) {
-            this.setState({ 
-                eventError: 'Failed to update event',
-                showUpdateEventForm: true
-            });
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Failed to update event';
+            e.target.prepend(errorDiv);
         }
     }
     
     handleDeleteEvent = async (e) => {
         e.preventDefault();
+        const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
+        existingMessages.forEach(msg => msg.remove());
+        
         const formData = new FormData(e.target);
         const eventID = formData.get('eventID');
         
@@ -207,25 +260,26 @@ class AdminDashboard extends React.Component {
             });
             
             if (response.ok) {
-                this.setState({ 
-                    eventError: '',
-                    showDeleteEventForm: false
-                });
-                alert('Event deleted successfully');
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.textContent = 'Event deleted successfully';
+                e.target.prepend(successDiv);
+                setTimeout(() => this.setState({ showDeleteEventForm: false }), 2000);
             } else {
-                this.setState({ 
-                    eventError: 'Event not found or delete failed',
-                    showDeleteEventForm: true
-                });
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = 'Event not found or delete failed';
+                e.target.prepend(errorDiv);
             }
         } catch (error) {
-            this.setState({ 
-                eventError: 'Failed to delete event',
-                showDeleteEventForm: true
-            });
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = 'Failed to delete event';
+            e.target.prepend(errorDiv);
         }
     }
-
+    
+    
     render() {
         return (
             <div className="content">
@@ -330,7 +384,29 @@ class AdminDashboard extends React.Component {
                         </div>
                     </div>
                 )}
-    
+
+                {this.state.showUpdatePasswordForm && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h3>Update Password</h3>
+                            <form onSubmit={this.handlePasswordSubmit}>
+                                <input 
+                                    type="password" 
+                                    name="newPassword" 
+                                    placeholder="Enter new password" 
+                                    required 
+                                />
+                                <div className="form-buttons">
+                                    <button type="submit">Update</button>
+                                    <button type="button" onClick={() => this.setState({ showUpdatePasswordForm: false })}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 <div className="event-management">
                     <h3>Event Management</h3>
                     <div className="event-buttons">
