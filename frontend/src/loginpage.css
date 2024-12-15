@@ -4,7 +4,7 @@
     --bg-secondary: #ffffff;
     --text-primary: #2c3e50;
     --text-secondary: #34495e;
-    --nav-bg: #2c3e50;
+    --nav-bg: #2c3e5066;
     --nav-text: #ecf0f1;
     --button-primary: #3498db;
     --button-primary-hover: #2980b9;
@@ -18,6 +18,7 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --success-color: #00b894;
     --error-color: #e74c3c;
+    --home-bg: rgba(255, 255, 255, 0.6);
 }
 
 /* Dark Theme */
@@ -26,7 +27,7 @@
     --bg-secondary: #2c3e50;
     --text-primary: #ecf0f1;
     --text-secondary: #bdc3c7;
-    --nav-bg: #1a1a1a;
+    --nav-bg: #1a1a1a97;
     --nav-text: #ecf0f1;
     --button-primary: #3498db;
     --button-primary-hover: #2980b9;
@@ -40,6 +41,7 @@
     --shadow-color: rgba(0, 0, 0, 0.3);
     --success-color: #00b894;
     --error-color: #e74c3c;
+    -home-bg: rgba(0, 0, 0, 0.6);
 }
 
 
@@ -110,15 +112,13 @@ body {
 }
 
 .theme-toggle {
-    margin-left: 10px;
     background: transparent;
-    border: 2px solid var(--nav-text);
+    border: 1px solid var(--nav-text);
     color: var(--nav-text);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-right: 1rem;
 }
 
 .theme-toggle:hover {
@@ -809,6 +809,40 @@ body {
     transition: background-color 1s ease;
 }
 
+.home-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.background-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+}
+
+.overlay {
+    padding: 70px;
+    width: 80%;
+    left: 10%;
+    height: 60%;
+    background-color: var(--nav-bg);
+    position: relative;
+    color: var(--nav-text);
+    letter-spacing: 2px;
+    font-size: 25px;
+    text-align: center;
+    top: 25%;
+    z-index: 200;
+    border-radius: 10px;
+    backdrop-filter:blur(25px);
+}
 
 .navbar,
 .login-container,
