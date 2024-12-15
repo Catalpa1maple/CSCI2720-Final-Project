@@ -5,10 +5,10 @@ class PublicHomePage extends React.Component {
     render() {
         return (
             <>
-                <nav className="public-navbar">
+                {/* <nav className="public-navbar">
                     <div className="public-nav-brand">Location App</div>
                     <Link to="/login" className="login-nav-button">Login</Link>
-                </nav>
+                </nav> */}
                 <main className="content">
                     <h1>Welcome to Our Application</h1>
                     {/* Your public content here */}

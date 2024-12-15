@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 import Login from './components/Login';
 import AdminDashboard from './components/AdminDashboard';
@@ -9,43 +9,67 @@ import Favourites from './components/Favourites';
 import VenueComments from './components/VenueComments';
 import './loginpage.css';
 
+// Theme Context
+export const ThemeContext = createContext();
+
 class App extends React.Component {
+    state = {
+        isDarkMode: localStorage.getItem('theme') === 'dark'
+    };
+
+    componentDidMount() {
+        // Set initial theme
+        document.documentElement.setAttribute('data-theme', this.state.isDarkMode ? 'dark' : 'light');
+    }
+
+    toggleTheme = () => {
+        this.setState(prevState => {
+            const newMode = !prevState.isDarkMode;
+            localStorage.setItem('theme', newMode ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', newMode ? 'dark' : 'light');
+            return { isDarkMode: newMode };
+        });
+    };
+
     render() {
         return (
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path="/" component={PublicHomePage} /> 
-                    <Route path="/login" component={Login} />
-                    <PrivateRoute
-                        path="/admin"
-                        component={AdminDashboard}
-                        adminRequired
-                    />
-                    <PrivateRoute
-                        path="/home"
-                        component={HomePage}
-                    />
-                    <PrivateRoute
-                        path="/locations"
-                        component={venues}
-                    />
-
-                    <PrivateRoute
-                        path="/venues/:id/comments"
-                        component={VenueComments}
-                    />
-
-                    <PrivateRoute
-                        path="/favourites"
-                        component={Favourites}
-                    />
-                </Switch>
-            </BrowserRouter>
+            <ThemeContext.Provider value={{ 
+                isDarkMode: this.state.isDarkMode, 
+                toggleTheme: this.toggleTheme 
+            }}>
+                <BrowserRouter>
+                    <div className="app-container">
+                        <Navigation />
+                        <main className="main-content">
+                            <Switch>
+                                <Route exact path="/" component={PublicHomePage} />
+                                <Route path="/login" component={Login} />
+                                <Route path="/home" component={HomePage} />
+                                <Route path="/locations" component={venues} />
+                                <Route path="/map" component={Map} />
+                                <PrivateRoute
+                                    path="/admin"
+                                    component={AdminDashboard}
+                                    adminRequired
+                                />
+                                <PrivateRoute
+                                    path="/venues/:id/comments"
+                                    component={VenueComments}
+                                />
+                                <PrivateRoute
+                                    path="/favourites"
+                                    component={Favourites}
+                                />
+                            </Switch>
+                        </main>
+                    </div>
+                </BrowserRouter>
+            </ThemeContext.Provider>
         );
     }
 }
 
-// Component to handle protected routes and authentication
+// PrivateRoute for admin and authenticated-only features
 class PrivateRoute extends React.Component {
     render() {
         const { component: Component, adminRequired = false, ...rest } = this.props;
@@ -57,29 +81,35 @@ class PrivateRoute extends React.Component {
                 {...rest}
                 render={props => {
                     if (!isAuthenticated) {
-                        return <Redirect to="/" />;
+                        return <Redirect to={{
+                            pathname: "/login",
+                            state: { from: props.location }
+                        }} />;
                     }
 
-                    return (
-                        <>
-                            <Navigation />
-                            <Component {...props} />
-                        </>
-                    );
+                    if (adminRequired && !isAdmin) {
+                        return <Redirect to="/home" />;
+                    }
+
+                    return <Component {...props} />;
                 }}
             />
         );
     }
 }
 
-// Navigation bar component with user info and logout
+// Navigation component
 class Navigation extends React.Component {
+    static contextType = ThemeContext;
+
     handleLogout = () => {
         localStorage.clear();
         window.location.href = '/';
     }
 
     render() {
+        const { isDarkMode, toggleTheme } = this.context;
+        const isAuthenticated = localStorage.getItem('token');
         const isAdmin = localStorage.getItem('isadmin') === '1';
         const username = localStorage.getItem('username');
 
@@ -87,20 +117,34 @@ class Navigation extends React.Component {
             <nav className="navbar">
                 <div className="nav-brand">Location App</div>
                 <div className="nav-links">
-                    {/*Demo */}
                     <Link className="nav-link" to="/home">Home</Link>
                     <Link className="nav-link" to="/locations">Locations</Link>
                     <Link className="nav-link" to="/map">Map</Link>
-                    <Link className="nav-link" to="/favourites">Favourites</Link>
                     
-                    {isAdmin && (
-                        <Link className="nav-link" to="/admin">Admin Panel</Link>
+                    {isAuthenticated && (
+                        <>
+                            <Link className="nav-link" to="/favourites">Favourites</Link>
+                            {isAdmin && (
+                                <Link className="nav-link" to="/admin">Admin Panel</Link>
+                            )}
+                        </>
                     )}
-                    <div className="user-info">
-                        <span>Welcome, {username}</span>
-                        <button onClick={this.handleLogout} className="logout-button">
-                            Logout
+                    
+                    <div className="user-controls">
+                        <button onClick={toggleTheme} className="theme-toggle">
+                            {isDarkMode ? '☀️' : '🌙'}
                         </button>
+                        
+                        {isAuthenticated ? (
+                            <div className="user-info">
+                                <span>Welcome, {username}</span>
+                                <button onClick={this.handleLogout} className="logout-button">
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            <Link to="/login" className="login-button">Login</Link>
+                        )}
                     </div>
                 </div>
             </nav>
