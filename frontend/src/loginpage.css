@@ -545,3 +545,163 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Venues Header Styles */
+.venues-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 90px;
+    padding: 0 2rem;
+}
+
+.venues-header h2 {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 600;
+    flex-shrink: 0; /* Prevents the title from shrinking */
+}
+
+.filters-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto; /* This pushes the container to the right */
+    flex-wrap: nowrap; /* Prevents wrapping of filter elements */
+}
+
+.category-select {
+    min-width: 200px;
+    height: 38px;
+    padding: 0.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: white;
+    flex-shrink: 0; /* Prevents the select from shrinking */
+}
+
+.category-select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-container {
+    position: relative;
+    width: 300px; /* Fixed width for search container */
+    flex-shrink: 0; /* Prevents the search from shrinking */
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    height: 38px;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.no-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 0.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 4px;
+    color: #666;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* Responsive styles for venues header */
+@media (max-width: 768px) {
+    .venues-header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 1rem;
+    }
+
+    .filters-container {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    .category-select,
+    .search-container {
+        width: 100%;
+    }
+}
+
+/* Venues Table Styles */
+.venues-container {
+    padding: 0 2rem;
+}
+
+.table {
+    margin-top: 1rem;
+}
+
+.table a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.table a:hover {
+    text-decoration: underline;
+}
+
+.distance-filter {
+    min-width: 200px;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+}
+
+.distance-filter label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.slider-container {
+    padding: 0 10px;
+}
+
+.distance-value {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.filters-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.category-select,
+.search-container,
+.distance-filter {
+    height: 100%;
+    min-height: 38px;
+}
+/* */
