@@ -8,10 +8,12 @@ const VenueComments = () => {
     const [newComment, setNewComment] = useState('');
     const [isFavourited, setIsFavourited] = useState(false);
     const username = localStorage.getItem('username');
+    const [venueName, setVenueName] = useState('');
 
     useEffect(() => {
         fetchComments();
         checkFavouriteStatus();
+        fetchVenueDetails();
     }, [id]);
 
     const fetchComments = async () => {
@@ -21,6 +23,19 @@ const VenueComments = () => {
             setComments(data);
         } catch (error) {
             console.error('Error fetching comments:', error);
+        }
+    };
+
+    const fetchVenueDetails = async () => {
+        try {
+            const response = await fetch(`http://localhost:5001/venues`);
+            const venues = await response.json();
+            const venue = venues.find(v => v.id === id);
+            if (venue) {
+                setVenueName(venue.name);
+            }
+        } catch (error) {
+            console.error('Error fetching venue details:', error);
         }
     };
 
@@ -83,7 +98,7 @@ const VenueComments = () => {
         <div className="content">
             <div className="event-management">
                 <div className="venue-header">
-                    <h3>Comments for Venue {id}</h3>
+                    <h3>Comments for Venue {id} - {venueName}</h3>
                     <Button
                         onClick={toggleFavourite}
                         variant={isFavourited ? "danger" : "primary"}
