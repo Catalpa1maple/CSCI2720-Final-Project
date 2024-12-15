@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Form, Button, ListGroup } from 'react-bootstrap';
+import { Loader } from "@googlemaps/js-api-loader";
 
 const VenueComments = () => {
     const { id } = useParams();
@@ -9,12 +10,14 @@ const VenueComments = () => {
     const [isFavourited, setIsFavourited] = useState(false);
     const username = localStorage.getItem('username');
     const [venueName, setVenueName] = useState('');
+    const [venueLocation, setVenueLocation] = useState(null);
 
     useEffect(() => {
         fetchComments();
         checkFavouriteStatus();
         fetchVenueDetails();
     }, [id]);
+
 
     const fetchComments = async () => {
         try {
@@ -26,17 +29,41 @@ const VenueComments = () => {
         }
     };
 
+
     const fetchVenueDetails = async () => {
         try {
-            const response = await fetch(`http://localhost:5001/venues`);
+            const response = await fetch('http://localhost:5001/map');
             const venues = await response.json();
             const venue = venues.find(v => v.id === id);
             if (venue) {
                 setVenueName(venue.name);
+                setVenueLocation(venue);
+                initializeMap(venue);
             }
         } catch (error) {
             console.error('Error fetching venue details:', error);
         }
+    };
+
+    const initializeMap = async (venue) => {
+        const loader = new Loader({
+            apiKey: "AIzaSyChCTwugUIVZHdJICzzg-NdQ2F0WN46Mf8",
+            version: "weekly",
+        });
+
+        loader.load().then(async () => {
+            const { Map } = await google.maps.importLibrary("maps");
+            const map = new Map(document.querySelector("#canva"), {
+                center: { lat: parseFloat(venue.latitude), lng: parseFloat(venue.longitude) },
+                zoom: 15,
+            });
+
+            new google.maps.Marker({
+                position: { lat: parseFloat(venue.latitude), lng: parseFloat(venue.longitude) },
+                map: map,
+                title: venue.name,
+            });
+        });
     };
 
     const checkFavouriteStatus = async () => {
@@ -96,6 +123,7 @@ const VenueComments = () => {
 
     return (
         <div className="content">
+            <div id="canva" style={{ height: '400px', width: '100%', marginBottom: '20px' }}></div>
             <div className="event-management">
                 <div className="venue-header">
                     <h3>Comments for Venue {id} - {venueName}</h3>
@@ -124,7 +152,7 @@ const VenueComments = () => {
                         Add Comment
                     </Button>
                 </Form>
-
+    
                 <div className="event-details">
                     <ListGroup>
                         {comments.map((comment) => (
@@ -143,6 +171,8 @@ const VenueComments = () => {
             </div>
         </div>
     );
+    
+    
 };
 
 export default VenueComments;
