@@ -704,4 +704,17 @@ body {
     height: 100%;
     min-height: 38px;
 }
-/* */
+
+.sortable-header {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.sortable-header:hover {
+    background-color: #bbdefb; /* Light blue color */
+}
+
+.sortable-header {
+    transition: background-color 1s ease;
+}

@@ -13,6 +13,7 @@ const VenuesTable = () => {
     const username = localStorage.getItem('username');
     const [distanceFilter, setDistanceFilter] = useState(50);
     const [userLocation, setUserLocation] = useState(null);
+    const [sortOrder, setSortOrder] = useState('desc');
 
     useEffect(() => {
         fetchVenues();
@@ -210,6 +211,17 @@ const VenuesTable = () => {
 
     const filteredVenues = searchVenues(venues, debouncedSearchTerm);
 
+    // Sorting Number of Events
+    const sortVenues = (venuesToSort) => {
+        return [...venuesToSort].sort((a, b) => {
+            if (sortOrder === 'desc') {
+                return b.eventCount - a.eventCount;
+            } else {
+                return a.eventCount - b.eventCount;
+            }
+        });
+    };
+
     return (
         <div className="venues-container">
             <div className="venues-header">
@@ -264,12 +276,21 @@ const VenuesTable = () => {
                     <tr>
                         <th>Venue ID</th>
                         <th>Venue Name</th>
-                        <th>Number of Events</th>
+                        <th 
+                            className="sortable-header"
+                            onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            Number of Events 
+                            <span style={{ marginLeft: '5px' }}>
+                                {sortOrder === 'desc' ? '▼' : '▲'}
+                            </span>
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredVenues.map((venue) => (
+                    {sortVenues(filteredVenues).map((venue) => (
                         <tr key={venue.id}>
                             <td>{venue.id}</td>
                             <td>
