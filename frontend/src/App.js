@@ -131,15 +131,14 @@ class Navigation extends React.Component {
                             )}
                         </>
                     )}
-                    
-                    <div className="user-controls">
-                        <button onClick={toggleTheme} className="theme-toggle">
+                    <button onClick={toggleTheme} className="theme-toggle">
                             {isDarkMode ? '☀️' : '🌙'}
                         </button>
+                    <div className="user-controls">
                         
                         {isAuthenticated ? (
                             <div className="user-info">
-                                <span>Welcome, {username}</span>
+                                <span>Hi, {username}</span>
                                 <button onClick={this.handleLogout} className="logout-button">
                                     LOGOUT
                                 </button>
