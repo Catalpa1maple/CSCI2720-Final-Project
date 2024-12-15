@@ -7,6 +7,7 @@ import PublicHomePage from './components/PublicHomePage';
 import venues from './components/Locations';
 import Favourites from './components/Favourites';
 import VenueComments from './components/VenueComments';
+import map from "./components/map"
 import './loginpage.css';
 
 class App extends React.Component {
@@ -33,6 +34,11 @@ class App extends React.Component {
                     <PrivateRoute
                         path="/venues/:id/comments"
                         component={VenueComments}
+                    />
+                    
+                    <PrivateRoute
+                        path="/map"
+                        component={map}
                     />
 
                     <PrivateRoute
