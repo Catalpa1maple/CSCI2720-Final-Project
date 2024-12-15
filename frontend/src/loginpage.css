@@ -521,3 +521,27 @@ body {
     background-color: #c0392b;
     border-color: #c0392b;
 }
+
+/* Venue Comments Styles */
+.venue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.venue-header h3 {
+    margin-bottom: 0;
+}
+
+.favourite-button {
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.favourite-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

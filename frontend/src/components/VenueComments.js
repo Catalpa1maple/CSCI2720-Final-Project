@@ -6,10 +6,12 @@ const VenueComments = () => {
     const { id } = useParams();
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [isFavourited, setIsFavourited] = useState(false);
     const username = localStorage.getItem('username');
 
     useEffect(() => {
         fetchComments();
+        checkFavouriteStatus();
     }, [id]);
 
     const fetchComments = async () => {
@@ -19,6 +21,38 @@ const VenueComments = () => {
             setComments(data);
         } catch (error) {
             console.error('Error fetching comments:', error);
+        }
+    };
+
+    const checkFavouriteStatus = async () => {
+        try {
+            const response = await fetch(`http://localhost:5001/api/favourites/check/${username}/${id}`);
+            const data = await response.json();
+            setIsFavourited(data.isFavourited);
+        } catch (error) {
+            console.error('Error checking favourite status:', error);
+        }
+    };
+
+    const toggleFavourite = async () => {
+        try {
+            const endpoint = isFavourited ? 'remove' : 'add';
+            const response = await fetch(`http://localhost:5001/api/favourites/${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    locationId: id
+                })
+            });
+
+            if (response.ok) {
+                setIsFavourited(!isFavourited);
+            }
+        } catch (error) {
+            console.error('Error toggling favourite:', error);
         }
     };
 
@@ -38,7 +72,7 @@ const VenueComments = () => {
 
             if (response.ok) {
                 setNewComment('');
-                fetchComments(); // Refresh comments after posting
+                fetchComments();
             }
         } catch (error) {
             console.error('Error posting comment:', error);
@@ -48,7 +82,16 @@ const VenueComments = () => {
     return (
         <div className="content">
             <div className="event-management">
-                <h3>Comments for Venue {id}</h3>
+                <div className="venue-header">
+                    <h3>Comments for Venue {id}</h3>
+                    <Button
+                        onClick={toggleFavourite}
+                        variant={isFavourited ? "danger" : "primary"}
+                        className="favourite-button"
+                    >
+                        {isFavourited ? "Remove from Favourites" : "Add to Favourites"}
+                    </Button>
+                </div>
                 
                 <Form onSubmit={handleSubmitComment} className="create-form">
                     <Form.Group>
@@ -63,7 +106,7 @@ const VenueComments = () => {
                         />
                     </Form.Group>
                     <Button type="submit" className="crud-button create-button mt-2">
-                        Post Comment
+                        Add Comment
                     </Button>
                 </Form>
 

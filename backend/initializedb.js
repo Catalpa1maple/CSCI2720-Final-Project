@@ -61,7 +61,7 @@ const initializeDatabase = async () => {
             username: 'usertest',
             password: userPasswordTest,
             email: '1155174399@link.cuhk.edu.hk',
-            isEmailVerified: True,
+            isEmailVerified: true,
             isadmin: 0,
             otp: {
                 code: null,

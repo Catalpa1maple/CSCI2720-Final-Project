@@ -251,6 +251,25 @@ class Server {
                 });
             }
         });
+        this.app.get('/api/favourites/check/:username/:locationId', async (req, res) => {
+            try {
+                const { username, locationId } = req.params;
+                
+                const favourite = await FavouriteLocation.findOne({ 
+                    username, 
+                    locationId 
+                });
+                
+                res.json({ 
+                    isFavourited: !!favourite 
+                });
+            } catch (error) {
+                res.status(500).json({ 
+                    message: 'Server error', 
+                    error: error.message 
+                });
+            }
+        });
         
         this.app.get('/api/favourites/:username', async (req, res) => {
             try {
