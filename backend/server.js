@@ -251,6 +251,7 @@ class Server {
                 });
             }
         });
+
         this.app.get('/api/favourites/check/:username/:locationId', async (req, res) => {
             try {
                 const { username, locationId } = req.params;
@@ -344,6 +345,29 @@ class Server {
                 res.status(500).json({ message: 'Error adding comment' });
             }
         }); 
+        
+
+        // Map Page Setting (Section Start)
+        this.app.get('/map', async (req, res) => {
+            try {
+                const venues = await Location.find().limit(10);
+
+                const venueEventCounts = await Promise.all(venues.map(async venue => {
+                    const eventCount = await Event.countDocuments({ venue: venue.id });
+                    return {
+                        id: venue.id,
+                        name: venue.name,
+                        latitude: venue.latitude,
+                        longitude: venue.longitude
+                    };
+                }));
+
+                res.json(venueEventCounts);
+            } catch (error) {
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+        // Map Page Setting (Section End)
         
     }
     

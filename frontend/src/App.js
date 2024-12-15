@@ -7,6 +7,7 @@ import PublicHomePage from './components/PublicHomePage';
 import venues from './components/Locations';
 import Favourites from './components/Favourites';
 import VenueComments from './components/VenueComments';
+import map from "./components/map"
 import './loginpage.css';
 
 // Theme Context
@@ -21,6 +22,7 @@ class App extends React.Component {
         // Set initial theme
         document.documentElement.setAttribute('data-theme', this.state.isDarkMode ? 'dark' : 'light');
     }
+
 
     toggleTheme = () => {
         this.setState(prevState => {
