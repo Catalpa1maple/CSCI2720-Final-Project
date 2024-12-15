@@ -47,8 +47,8 @@ class App extends React.Component {
                                 <Route exact path="/" component={PublicHomePage} />
                                 <Route path="/login" component={Login} />
                                 <Route path="/home" component={HomePage} />
-                                <Route path="/locations" component={venues} />
-                                <Route path="/map" component={Map} />
+                                <PrivateRoute path="/locations" component={venues} />
+                                <PrivateRoute path="/map" component={Map} />
                                 <PrivateRoute
                                     path="/admin"
                                     component={AdminDashboard}
@@ -120,11 +120,11 @@ class Navigation extends React.Component {
                 <div className="nav-brand">LOCATIONS APP</div>
                 <div className="nav-links">
                     <Link className="nav-link" to="/home">HOME</Link>
-                    <Link className="nav-link" to="/locations">LOCATIONS</Link>
-                    <Link className="nav-link" to="/map">MAP</Link>
                     
                     {isAuthenticated && (
                         <>
+                            <Link className="nav-link" to="/locations">LOCATIONS</Link>
+                            <Link className="nav-link" to="/map">MAP</Link>
                             <Link className="nav-link" to="/favourites">FAVOURITE</Link>
                             {isAdmin && (
                                 <Link className="nav-link" to="/admin">ADMIN PANEL</Link>
