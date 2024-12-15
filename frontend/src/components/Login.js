@@ -122,11 +122,15 @@ class Login extends React.Component {
             });
             
             if (response.ok) {
-                // Reset verification views after successful verification
+                // Reset verification views after successful verification and return to login page
                 this.setState({ 
                     showEmailVerification: false,
                     showRegistrationOTP: false,
-                    error: 'Email verified successfully! Please login.'
+                    showRegister: false,
+                    showOTPInput: false,
+                    error: 'Email verified successfully! Please login.',
+                    otp: '',
+                    email: ''
                 });
             } else {
                 const data = await response.json();

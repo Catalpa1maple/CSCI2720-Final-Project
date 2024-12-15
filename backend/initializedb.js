@@ -55,9 +55,25 @@ const initializeDatabase = async () => {
         });
         await user.save();
 
+        // Create default user after registration
+        const userPasswordTest = await bcrypt.hash('user123', 10);
+        const usertest = new User({
+            username: 'usertest',
+            password: userPasswordTest,
+            email: '1155174399@link.cuhk.edu.hk',
+            isEmailVerified: True,
+            isadmin: 0,
+            otp: {
+                code: null,
+                expiry: null
+            }
+        });
+        await usertest.save();
+
         console.log('Database initialized successfully!');
         console.log('Default Admin - username: admin, password: admin123');
         console.log('Default User - username: user, password: user123');
+        console.log('Default User - username: usertest, password: user123');
 
         mongoose.connection.close();
     } catch (error) {
