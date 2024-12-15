@@ -53,9 +53,12 @@
     box-sizing: border-box;
     /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     font-family: "Inter", sans-serif;
-
+    font-weight: 50;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Inter", sans-serif;
+    font-weight: 100;}
 /* main {
     position: absolute;
     top: 20px;
@@ -100,9 +103,9 @@ body {
 }
 
 .nav-link {
+    font-weight: 10;
     color: var(--nav-text);
     text-decoration: none;
-    font-weight: 500;
     transition: color 0.3s ease;
     font-size: 1rem;
 }
@@ -286,7 +289,7 @@ body {
 .table th {
     background: var(--table-bg);
     color: white;
-    font-weight: 500;
+    font-weight: 100;
 }
 
 .table th {
@@ -647,10 +650,11 @@ body {
 }
 
 .venues-header h2 {
+    font-family: "Inter", sans-serif;
     color: var(--bg-primary);
     margin: 0;
     font-size: 2.2rem;
-    font-weight: 600;
+    font-weight: 100;
     flex-shrink: 0; /* Prevents the title from shrinking */
 }
 

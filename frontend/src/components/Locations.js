@@ -225,7 +225,7 @@ const VenuesTable = () => {
     return (
         <div className="venues-container">
             <div className="venues-header">
-                <h2>Venue List</h2>
+                <h2>VENUE LIST</h2>
                 <div className="filters-container">
                     <div className="distance-filter">
                         <label>Filter by Distance</label>
