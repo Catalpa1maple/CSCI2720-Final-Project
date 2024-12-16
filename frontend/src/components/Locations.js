@@ -11,7 +11,7 @@ const VenuesTable = () => {
     const [selectedCategory, setSelectedCategory] = useState('All categories');
     const [categories, setCategories] = useState(['All categories']);
     const username = localStorage.getItem('username');
-    const [distanceFilter, setDistanceFilter] = useState(50);
+    const [distanceFilter, setDistanceFilter] = useState(25);
     const [userLocation, setUserLocation] = useState(null);
     const [sortOrder, setSortOrder] = useState('desc');
 
@@ -48,21 +48,30 @@ const VenuesTable = () => {
                 },
                 (error) => {
                     console.error("Error getting location:", error);
+                    alert("Please enable location services to use distance filtering.");
                     setUserLocation({ lat: 22.3193, lng: 114.1694 }); // Default HK coordinates
                 }
             );
+        } else {
+            alert("Geolocation is not supported by your browser.");
         }
-    }, []);
+    }, []);    
 
     const fetchVenues = async () => {
-        try {
-            const response = await fetch('http://localhost:5001/venues');
-            const data = await response.json();
-            setVenues(data);
-        } catch (error) {
-            console.error('Error fetching venues:', error);
+    try {
+        let url = 'http://localhost:5001/venues';
+        
+        if (userLocation) {
+            url += `?lat=${userLocation.lat}&lng=${userLocation.lng}&maxDistance=${distanceFilter}`;
         }
-    };
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        setVenues(data);
+    } catch (error) {
+        console.error('Error fetching venues:', error);
+    }
+};
 
     const fetchFavourites = async () => {
         try {
@@ -117,21 +126,22 @@ const VenuesTable = () => {
     const searchVenues = (venues, searchTerm) => {
         let filteredResults = venues;
 
-        // Apply distance filter
-        if (userLocation && distanceFilter < 50) { // Only filter if less than max distance
+        // Apply distance filter if user location is available
+        if (userLocation) {
             filteredResults = filteredResults.filter(venue => {
-                if (!venue.latitude || !venue.longitude) return true; // Skip venues without coordinates
+                if (!venue.latitude || !venue.longitude) return false;
+                
                 const distance = calculateDistance(
                     userLocation.lat,
                     userLocation.lng,
                     venue.latitude,
                     venue.longitude
-                );
+                );                
                 return distance <= distanceFilter;
             });
         }
 
-        // Apply category filter first
+        // Apply category filter
         if (selectedCategory !== 'All categories') {
             filteredResults = filteredResults.filter(venue => 
                 venue.name.includes(`(${selectedCategory}`)
@@ -220,6 +230,14 @@ const VenuesTable = () => {
                 return a.eventCount - b.eventCount;
             }
         });
+    }; // Sorting Number of Events End
+
+    const getDistanceLabel = (distance) => {
+        if (distance <= 2) return 'Very Close';
+        if (distance <= 5) return 'Nearby';
+        if (distance <= 10) return 'Medium Distance';
+        if (distance <= 15) return 'Further';
+        return 'Far';
     };
 
     return (
@@ -228,21 +246,47 @@ const VenuesTable = () => {
                 <h2>VENUE LIST</h2>
                 <div className="filters-container">
                     <div className="distance-filter">
-                        <label>Filter by Distance</label>
+                        <label>
+                            Filter by Distance 
+                            {!userLocation && <span style={{ color: '#e74c3c' }}> (Enable location)</span>}
+                        </label>
                         <div className="slider-container">
-                            <Slider
-                                min={0}
-                                max={50}
-                                value={distanceFilter}
-                                onChange={setDistanceFilter}
-                                railStyle={{ backgroundColor: '#e0e0e0' }}
-                                trackStyle={{ backgroundColor: '#3498db' }}
-                                handleStyle={{
-                                    borderColor: '#3498db',
-                                    backgroundColor: '#3498db'
-                                }}
-                            />
-                            <div className="distance-value">{distanceFilter} km</div>
+                        <Slider
+                            min={0}
+                            max={25}
+                            step={0.1} // Add step for more precise control
+                            value={distanceFilter}
+                            onChange={(value) => {
+                                setDistanceFilter(value);
+                            }}
+                            railStyle={{ backgroundColor: '#e0e0e0' }}
+                            trackStyle={{ backgroundColor: userLocation ? '#3498db' : '#95a5a6' }}
+                            handleStyle={{
+                                borderColor: userLocation ? '#3498db' : '#95a5a6',
+                                backgroundColor: userLocation ? '#3498db' : '#95a5a6'
+                            }}
+                            disabled={!userLocation}
+                            marks={{
+                                0: ' ',
+                                5: ' ',
+                                10: ' ',
+                                15: ' ',
+                                20: ' ',
+                                25: ' '
+                            }}
+                        />
+                            <div className="distance-value">
+                                {distanceFilter} km
+                                <span style={{ 
+                                    fontSize: '0.8em', 
+                                    color: '#666', 
+                                    display: 'block',
+                                    marginTop: '4px'
+                                }}>
+                                    ({getDistanceLabel(distanceFilter)})
+                                    {userLocation && <div>From your location</div>}
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <Form.Select

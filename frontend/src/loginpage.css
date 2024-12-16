@@ -18,7 +18,7 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --success-color: #00b894;
     --error-color: #e74c3c;
-    --home-bg: rgba(255, 255, 255, 0.6);
+    --home-bg: rgba(244, 18, 18, 0.6);
 }
 
 /* Dark Theme */
@@ -794,6 +794,51 @@ body {
     flex-wrap: wrap;
 }
 
+
+.distance-filter {
+    min-width: 250px; /* Increased width for better visibility */
+}
+
+.rc-slider-mark-text {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.rc-slider-mark-text-active {
+    color: #3498db;
+}
+
+.distance-value {
+    padding: 5px 0;
+}
+
+.distance-filter label span {
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+.distance-filter .slider-container {
+    padding: 0 10px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.distance-filter .slider-container.disabled {
+    opacity: 0.5;
+}
+
+.distance-value {
+    text-align: center;
+    margin-top: 0.5rem;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.distance-value span {
+    font-weight: normal;
+    margin-top: 2px;
+}
+
 .category-select,
 .search-container,
 .distance-filter {
@@ -848,6 +893,10 @@ body {
     z-index: 200;
     border-radius: 10px;
     backdrop-filter:blur(25px);
+}
+
+.modal-content h3 {
+    color: var(--modal-heading);
 }
 
 .navbar,
