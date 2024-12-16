@@ -59,7 +59,7 @@ const VenuesTable = () => {
 
     const fetchVenues = async () => {
     try {
-        let url = 'http://localhost:5001/venues';
+        let url = 'http://localhost:5001/map';
         
         if (userLocation) {
             url += `?lat=${userLocation.lat}&lng=${userLocation.lng}&maxDistance=${distanceFilter}`;
