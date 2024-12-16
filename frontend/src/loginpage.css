@@ -18,7 +18,7 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --success-color: #00b894;
     --error-color: #e74c3c;
-    --home-bg: rgba(255, 255, 255, 0.6);
+    --home-bg: rgba(244, 18, 18, 0.6);
 }
 
 /* Dark Theme */
@@ -848,6 +848,10 @@ body {
     z-index: 200;
     border-radius: 10px;
     backdrop-filter:blur(25px);
+}
+
+.modal-content h3 {
+    color: var(--modal-heading);
 }
 
 .navbar,
