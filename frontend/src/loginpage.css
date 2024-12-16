@@ -57,8 +57,9 @@
 }
 
 h1, h2, h3, h4, h5, h6 {
+    padding: 10px;
     font-family: "Inter", sans-serif;
-    font-weight: 100;}
+    font-weight: 200;}
 /* main {
     position: absolute;
     top: 20px;
@@ -595,12 +596,12 @@ body {
 
 /* Button Styles */
 .btn-primary {
-    background-color: var(--text-secondary);
+    background-color: var(--nav-bg);
     border-color: var(--input-border);
 }
 
 .btn-primary:hover {
-    background-color: var(--text-primary);
+    background-color: var(--text-secondary);
     border-color: var(--input-border);
 }
 
