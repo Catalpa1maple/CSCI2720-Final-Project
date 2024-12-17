@@ -53,13 +53,13 @@
     box-sizing: border-box;
     /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
     font-family: "Inter", sans-serif;
-    font-weight: 50;
+    font-weight: 200;
 }
 
 h1, h2, h3, h4, h5, h6 {
     padding: 10px;
     font-family: "Inter", sans-serif;
-    font-weight: 200;}
+    font-weight: 500;}
 /* main {
     position: absolute;
     top: 20px;
