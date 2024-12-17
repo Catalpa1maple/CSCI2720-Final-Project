@@ -106,7 +106,6 @@ body {
 }
 
 .nav-link {
-    font-weight: 10;
     color: var(--nav-text);
     text-decoration: none;
     transition: color 0.3s ease;
@@ -293,7 +292,7 @@ body {
 .table th {
     background: var(--table-bg);
     color: white;
-    font-weight: 100;
+    font-weight: 500;
 }
 
 .table th {
@@ -661,7 +660,6 @@ body {
     color: var(--bg-primary);
     margin: 0;
     font-size: 2.2rem;
-    font-weight: 100;
     flex-shrink: 0; /* Prevents the title from shrinking */
     font-weight: 500;
 }
@@ -912,7 +910,6 @@ body {
 
 .modal-content h3 {
     color: var(--text-secondary);
-    font-weight: 500;
 }
 
 .navbar,
