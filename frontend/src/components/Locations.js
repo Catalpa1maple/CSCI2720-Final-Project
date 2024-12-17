@@ -278,8 +278,7 @@ const VenuesTable = () => {
                             <div className="distance-value">
                                 {distanceFilter} km
                                 <span style={{ 
-                                    fontSize: '0.8em', 
-                                    color: '#666', 
+                                    fontSize: '0.8em',  
                                     display: 'block',
                                     marginTop: '4px'
                                 }}>
