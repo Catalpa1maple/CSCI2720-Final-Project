@@ -7,7 +7,7 @@ import PublicHomePage from './components/PublicHomePage';
 import venues from './components/Locations';
 import Favourites from './components/Favourites';
 import VenueComments from './components/VenueComments';
-import Map from "./components/map"
+import Map from "./components/Map"
 import './style.css';
 
 // Theme Context
