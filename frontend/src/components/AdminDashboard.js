@@ -2,7 +2,9 @@ import React from 'react';
 
 // Admin Dashboard component for user management
 class AdminDashboard extends React.Component {
+     // Initial state configuration
     state = {
+        // User Management States
         users: [],
         selectedUser: null,
         showUserInfo: false,
@@ -21,9 +23,19 @@ class AdminDashboard extends React.Component {
         eventError: ''
     }
 
+    /**
+     * Lifecycle method - Fetches users when component mounts
+     */
+
     componentDidMount() {
         this.fetchUsers();
     }
+
+        // USER MANAGEMENT METHODS
+
+    /**
+     * Fetches all users from the database
+     */
 
     // Fetch all users from database
     fetchUsers = async () => {
@@ -179,6 +191,7 @@ class AdminDashboard extends React.Component {
         }
     }
     
+    // Input EventID to read detial of event
     handleReadEvent = async (e) => {
         e.preventDefault();
         const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
@@ -200,13 +213,13 @@ class AdminDashboard extends React.Component {
             } else {
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'error-message';
-                errorDiv.textContent = 'Event not found';
+                errorDiv.textContent = 'Event not found'; // if eventID not exist
                 e.target.prepend(errorDiv);
             }
         } catch (error) {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
-            errorDiv.textContent = 'Failed to read event';
+            errorDiv.textContent = 'Failed to read event'; // if eventID not exist
             e.target.prepend(errorDiv);
         }
     }
@@ -246,6 +259,7 @@ class AdminDashboard extends React.Component {
         }
     }
     
+    // Delete Event
     handleDeleteEvent = async (e) => {
         e.preventDefault();
         const existingMessages = e.target.querySelectorAll('.error-message, .success-message');
@@ -268,7 +282,7 @@ class AdminDashboard extends React.Component {
             } else {
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'error-message';
-                errorDiv.textContent = 'Event not found or delete failed';
+                errorDiv.textContent = 'Event not found or delete failed'; // if eventID not exist  
                 e.target.prepend(errorDiv);
             }
         } catch (error) {
