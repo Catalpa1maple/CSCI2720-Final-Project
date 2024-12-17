@@ -8,7 +8,7 @@ import venues from './components/Locations';
 import Favourites from './components/Favourites';
 import VenueComments from './components/VenueComments';
 import Map from "./components/map"
-import './loginpage.css';
+import './style.css';
 
 // Theme Context
 export const ThemeContext = createContext();
