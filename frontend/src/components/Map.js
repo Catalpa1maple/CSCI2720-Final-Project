@@ -33,7 +33,7 @@ const MapComponent = () => {
 
     const fetchVenues = async () => {
         try {
-            const response = await fetch('http://localhost:5001/map');
+            const response = await fetch('http://localhost:5001/venues');
             const data = await response.json();
             setVenues(data);
         } catch (error) {

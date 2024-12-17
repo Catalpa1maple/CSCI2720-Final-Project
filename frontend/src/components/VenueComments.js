@@ -32,7 +32,7 @@ const VenueComments = () => {
 
     const fetchVenueDetails = async () => {
         try {
-            const response = await fetch('http://localhost:5001/map');
+            const response = await fetch('http://localhost:5001/venues');
             const venues = await response.json();
             const venue = venues.find(v => v.id === id);
             if (venue) {
