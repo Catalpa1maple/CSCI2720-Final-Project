@@ -186,7 +186,9 @@ class Server {
                     return {
                         id: venue.id,
                         name: venue.name,
-                        eventCount: eventCount
+                        eventCount: eventCount,
+                        latitude: venue.latitude,
+                        longitude: venue.longitude
                     };
                 }));
         
@@ -449,7 +451,7 @@ class Server {
         try {
             const existingUser = await User.findOne({ username });
             if (existingUser) {
-                return res.status(400).json({ message: 'Username already exists' });
+                return res.status(400).json({ message: 'Username already exists' }); // avoid duplicate user
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
