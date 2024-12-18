@@ -9,6 +9,11 @@ const authService = require('./services/authService');
 const Comment = require('./Schema/CommentSchema');
 const FavouriteLocation = require('./Schema/FavouriteLocationSchema');
 
+//For HTTPS server
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+
 
 // Import Account Schema for user management
 const User = require('./Schema/AccountSchema');
@@ -595,7 +600,21 @@ class Server {
     }
     // Event and Location Page (Section End)
     startServer() {
-        this.app.listen(5001, () => console.log('Server running on port 5001'));
+        const HTTPS_PORT = process.env.HTTPS_PORT || 5002;
+        const HTTP_PORT = process.env.HTTP_PORT || 5001;
+    
+        const httpsOptions = {
+            key: fs.readFileSync(path.join(__dirname, 'cert', 'key.pem')),
+            cert: fs.readFileSync(path.join(__dirname, 'cert', 'cert.pem'))
+        };
+    
+        // Create HTTPS server
+        https.createServer(httpsOptions, this.app).listen(HTTPS_PORT, () => {
+            console.log(`HTTPS Server running on port ${HTTPS_PORT}`);
+        });
+
+        this.app.listen(HTTP_PORT,() => console.log(`HTTP Server running on port ${HTTP_PORT}`));
+    
     }
 }
 
